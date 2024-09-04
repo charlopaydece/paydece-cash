@@ -40,6 +40,116 @@ function App() {
       usdtArsBuy: 722,
       usdtArsSell: 732,
       schedule: "8:00 - 20:00"
+    },
+    {
+      lat: -34.5876,
+      lng: -58.4215,
+      name: "Punto 4 - Palermo Soho",
+      scoring: 4.3,
+      usdtUsdBuy: 0.985,
+      usdtUsdSell: 1.015,
+      usdtArsBuy: 722,
+      usdtArsSell: 732,
+      schedule: "9:00 - 20:00"
+    },
+    {
+      lat: -34.5820,
+      lng: -58.4128,
+      name: "Punto 5 - Plaza Serrano",
+      scoring: 4.1,
+      usdtUsdBuy: 0.99,
+      usdtUsdSell: 1.01,
+      usdtArsBuy: 725,
+      usdtArsSell: 735,
+      schedule: "11:00 - 22:00"
+    },
+    {
+      lat: -34.5934,
+      lng: -58.4001,
+      name: "Punto 6 - Alto Palermo",
+      scoring: 4.4,
+      usdtUsdBuy: 0.975,
+      usdtUsdSell: 1.025,
+      usdtArsBuy: 718,
+      usdtArsSell: 728,
+      schedule: "10:00 - 22:00"
+    },
+    {
+      lat: -34.5880,
+      lng: -58.3950,
+      name: "Punto 7 - Recoleta Mall",
+      scoring: 4.6,
+      usdtUsdBuy: 0.98,
+      usdtUsdSell: 1.02,
+      usdtArsBuy: 723,
+      usdtArsSell: 733,
+      schedule: "9:00 - 21:00"
+    },
+    {
+      lat: -34.5872,
+      lng: -58.3917,
+      name: "Punto 8 - Cementerio de Recoleta",
+      scoring: 4.2,
+      usdtUsdBuy: 0.985,
+      usdtUsdSell: 1.015,
+      usdtArsBuy: 721,
+      usdtArsSell: 731,
+      schedule: "8:00 - 18:00"
+    },
+    {
+      lat: -34.5838,
+      lng: -58.3989,
+      name: "Punto 9 - Av. Pueyrredón",
+      scoring: 4.0,
+      usdtUsdBuy: 0.99,
+      usdtUsdSell: 1.01,
+      usdtArsBuy: 724,
+      usdtArsSell: 734,
+      schedule: "9:30 - 19:30"
+    },
+    {
+      lat: -34.5912,
+      lng: -58.4075,
+      name: "Punto 10 - Plaza Italia",
+      scoring: 4.5,
+      usdtUsdBuy: 0.98,
+      usdtUsdSell: 1.02,
+      usdtArsBuy: 726,
+      usdtArsSell: 736,
+      schedule: "10:00 - 20:00"
+    },
+    {
+      lat: -34.5796,
+      lng: -58.4117,
+      name: "Punto 11 - Jardín Botánico",
+      scoring: 4.3,
+      usdtUsdBuy: 0.985,
+      usdtUsdSell: 1.015,
+      usdtArsBuy: 720,
+      usdtArsSell: 730,
+      schedule: "8:00 - 19:00"
+    },
+    {
+      lat: -34.5865,
+      lng: -58.3880,
+      name: "Punto 12 - Biblioteca Nacional",
+      scoring: 4.1,
+      usdtUsdBuy: 0.99,
+      usdtUsdSell: 1.01,
+      usdtArsBuy: 722,
+      usdtArsSell: 732,
+      schedule: "9:00 - 18:00"
+    },
+    {
+      lat: -34.5940,
+      lng: -58.3960,
+      name: "Punto 13 - Facultad de Derecho",
+      scoring: 4.4,
+      usdtUsdBuy: 0.975,
+      usdtUsdSell: 1.025,
+      usdtArsBuy: 719,
+      usdtArsSell: 729,
+      schedule: "8:30 - 20:30"
     }
   ];
 
