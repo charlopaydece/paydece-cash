@@ -32,15 +32,24 @@
   margin-right: 5px;
 }
 
-button {
+.save-changes-button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: black;
   color: white;
   border: none;
+  border-radius: 9999px; /* Bordes completamente redondeados */
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%; /* Ocupa todo el ancho disponible */
 }
 
-button:hover {
-  background-color: #45a049;
+.save-changes-button:hover {
+  background-color: #333; /* Un negro ligeramente más claro al pasar el mouse */
+}
+
+@media (min-width: 768px) {
+  .save-changes-button {
+    width: auto; /* En pantallas más grandes, el botón no ocupa todo el ancho */
+  }
 }

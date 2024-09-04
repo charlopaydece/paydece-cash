@@ -1,6 +1,7 @@
 .sidebar {
   width: 200px;
-  background-color: #f0f0f0;
+  background-color: #1a202c; /* Color oscuro */
+  color: white;
   padding: 1rem;
   height: calc(100vh - 60px);
   overflow-y: auto;
@@ -15,12 +16,36 @@
 .sidebar li {
   padding: 0.5rem 0;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .sidebar li:hover {
-  background-color: #e0e0e0;
+  background-color: #2d3748; /* Color más claro al hacer hover */
 }
 
+.icon {
+  margin-right: 0.5rem;
+}
+
+/* Estilos para el botón Save Changes */
+.save-changes-button {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 9999px; /* Esto hace que los bordes sean 100% redondeados */
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-changes-button:hover {
+  background-color: #333; /* Un negro ligeramente más claro al pasar el mouse */
+}
+
+/* Asegúrate de que estos estilos se apliquen también en dispositivos móviles */
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
@@ -28,13 +53,17 @@
     left: 0;
     width: 80%; /* Reducido para no ocupar toda la pantalla */
     height: calc(100vh - 60px);
+    transform: translateX(-100%);
     transition: transform 0.3s ease;
     z-index: 1000;
     background-color: #f0f0f0;
-    transform: translateX(-100%);
   }
 
   .sidebar.mobile-open {
     transform: translateX(0);
+  }
+
+  .save-changes-button {
+    width: 100%; /* Hace que el botón ocupe todo el ancho en móviles */
   }
 }

@@ -57,6 +57,11 @@ function App() {
     scoring: 4.5
   };
 
+  const handleUpdateProfile = (updatedProfile) => {
+    console.log('Profile updated:', updatedProfile);
+    // Aquí iría la lógica para actualizar el perfil en tu estado o backend
+  };
+
   useEffect(() => {
     localStorage.setItem('points', JSON.stringify(points));
     console.log("Puntos actualizados:", points);
@@ -129,7 +134,7 @@ function App() {
             />
           )}
           {currentPage === 'profile' && (
-            <Profile userProfile={userProfile} />
+            <Profile userProfile={userProfile} onUpdateProfile={handleUpdateProfile} />
           )}
         </div>
       </div>

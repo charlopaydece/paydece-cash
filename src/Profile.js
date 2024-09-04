@@ -6,7 +6,12 @@ function Profile({ userProfile, onUpdateProfile }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onUpdateProfile({ ...userProfile, name });
+    if (onUpdateProfile && typeof onUpdateProfile === 'function') {
+      onUpdateProfile({ ...userProfile, name });
+    } else {
+      console.warn('onUpdateProfile is not provided or is not a function');
+      // Aquí puedes agregar alguna lógica alternativa si onUpdateProfile no está disponible
+    }
   };
 
   return (
@@ -61,7 +66,7 @@ function Profile({ userProfile, onUpdateProfile }) {
           <label>Recent Transactions:</label>
           <span>{userProfile.recentTransactions}</span>
         </div>
-        <button type="submit">Save Changes</button>
+        <button type="submit" className="save-changes-button">Save Changes</button>
       </form>
     </div>
   );
