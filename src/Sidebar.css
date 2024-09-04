@@ -1,0 +1,40 @@
+.sidebar {
+  width: 200px;
+  background-color: #f0f0f0;
+  padding: 1rem;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  padding: 0.5rem 0;
+  cursor: pointer;
+}
+
+.sidebar li:hover {
+  background-color: #e0e0e0;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 80%; /* Reducido para no ocupar toda la pantalla */
+    height: calc(100vh - 60px);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    background-color: #f0f0f0;
+    transform: translateX(-100%);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+}

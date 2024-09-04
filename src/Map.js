@@ -1,146 +1,180 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import { GoogleMap } from '@react-google-maps/api';
 import MerchantCard from './MerchantCard';
 
-const containerStyle = {
-  width: '100%',
-  height: '600px',
-};
-
-// Centro aproximado de CABA
-const center = {
-  lat: -34.6037,
-  lng: -58.3816
-};
-
-const mapOptions = {
-  disableDefaultUI: true,
-  zoomControl: false,
-  streetViewControl: false,
-  mapTypeControl: false,
-  fullscreenControl: false,
-};
-
-function Map({ points, onAddPoint, userProfile }) {
+function Map({ points, onAddPoint, userProfile, isAddingPoint }) {
   const [map, setMap] = useState(null);
-  const [markers, setMarkers] = useState([]);
-  const [circles, setCircles] = useState([]);
-  const [isAddingPoint, setIsAddingPoint] = useState(false);
   const [selectedMerchant, setSelectedMerchant] = useState(null);
+  const mapElementsRef = useRef({ markers: [], circles: [] });
+
+  const containerStyle = useMemo(() => ({
+    width: '100%',
+    height: 'calc(100vh - 100px)' // Ajusta este valor según el tamaño de tu navbar
+  }), []);
+
+  const center = useMemo(() => ({
+    lat: -34.6037,
+    lng: -58.3816
+  }), []);
+
+  const mapOptions = {
+    disableDefaultUI: true,
+    zoomControl: true,
+    streetViewControl: false,
+    mapTypeControl: false
+  };
 
   const onLoad = useCallback(function callback(map) {
-    console.log("Mapa cargado");
     setMap(map);
-    
-    if (points.length > 0) {
-      const bounds = new window.google.maps.LatLngBounds();
-      points.forEach(point => bounds.extend(point));
-      map.fitBounds(bounds);
-      
-      // Ajusta el zoom máximo a 14 para un poco más de acercamiento
-      const listener = window.google.maps.event.addListener(map, 'idle', function() {
-        if (map.getZoom() > 14) map.setZoom(14);
-        window.google.maps.event.removeListener(listener);
-      });
-    } else {
-      // Si no hay puntos, establece un zoom predeterminado un poco más cercano
-      map.setZoom(13);
-    }
-  }, [points]);
-
-  const onUnmount = useCallback(function callback(map) {
-    setMap(null);
   }, []);
 
-  useEffect(() => {
-    console.log("Puntos recibidos en Map:", points);
-    if (map && points.length > 0) {
-      const newMarkers = points.map((point, index) => {
-        const marker = new window.google.maps.Marker({
-          position: point,
-          label: (index + 1).toString(),
-          map: map
-        });
-        marker.addListener('click', () => handleMarkerClick(point));
-        return marker;
+  const handlePointClick = useCallback((point, circle) => {
+    setSelectedMerchant(point);
+    
+    // Resetear colores de todos los círculos
+    mapElementsRef.current.circles.forEach(c => {
+      c.setOptions({
+        strokeColor: '#FF0000',
+        fillColor: '#FF0000'
       });
-      setMarkers(newMarkers);
+    });
 
-      const newCircles = points.map((point, index) => {
-        const circle = new window.google.maps.Circle({
-          strokeColor: '#FF0000',
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
-          fillColor: '#FF0000',
-          fillOpacity: 0.35,
-          map,
-          center: point,
-          radius: 300
-        });
-        circle.addListener('click', () => handleMarkerClick(point));
-        return circle;
-      });
-      setCircles(newCircles);
-    }
-  }, [map, points]);
+    // Cambiar color del círculo seleccionado a negro
+    circle.setOptions({
+      strokeColor: '#000000', // Negro
+      fillColor: '#000000' // Negro
+    });
 
-  const handleMarkerClick = (point) => {
+    // Hacer zoom al punto
     if (map) {
-      map.setZoom(16);
-      map.panTo(point);
-
-      setTimeout(() => {
-        setSelectedMerchant({
-          ...point,
-          wallet: userProfile.wallet,
-          totalTransactions: userProfile.totalTransactions,
-          firstConnection: userProfile.firstConnection,
-          positiveReviews: userProfile.positiveReviews,
-          negativeReviews: userProfile.negativeReviews,
-          totalReviews: userProfile.totalReviews,
-          recentTransactions: userProfile.recentTransactions,
-          schedule: point.schedule || '9:00 - 18:00' // Añadimos el horario aquí
-        });
-      }, 300);
+      map.setZoom(15);
+      map.panTo({lat: point.lat, lng: point.lng});
     }
-  };
+  }, [map]);
 
-  const handleMapClick = (e) => {
-    if (isAddingPoint) {
-      const newPoint = { lat: e.latLng.lat(), lng: e.latLng.lng() };
-      console.log("Nuevo punto añadido:", newPoint);
-      onAddPoint(newPoint);
-      setIsAddingPoint(false);
+  const createMapElements = useCallback(() => {
+    if (!map) return;
+
+    // Limpiar marcadores y círculos existentes
+    mapElementsRef.current.markers.forEach(marker => marker.setMap(null));
+    mapElementsRef.current.circles.forEach(circle => circle.setMap(null));
+
+    const bounds = new window.google.maps.LatLngBounds();
+    const newMarkers = [];
+    const newCircles = [];
+
+    points.forEach(point => {
+      bounds.extend({lat: point.lat, lng: point.lng});
+      
+      // Crear marcador manualmente
+      const marker = new window.google.maps.Marker({
+        position: {lat: point.lat, lng: point.lng},
+        map: map,
+        title: point.name
+      });
+
+      // Crear círculo manualmente
+      const circle = new window.google.maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.35,
+        map: map,
+        center: {lat: point.lat, lng: point.lng},
+        radius: 300,
+        clickable: true // Hacer el círculo clickeable
+      });
+
+      // Añadir evento de clic al marcador y al círculo
+      const clickHandler = () => handlePointClick(point, circle);
+      marker.addListener('click', clickHandler);
+      circle.addListener('click', clickHandler);
+
+      newMarkers.push(marker);
+      newCircles.push(circle);
+    });
+
+    mapElementsRef.current = { markers: newMarkers, circles: newCircles };
+    
+    if (points.length > 0) {
+      map.fitBounds(bounds);
     } else {
+      map.setCenter(center);
+      map.setZoom(13);
+    }
+  }, [map, points, center, handlePointClick]);
+
+  useEffect(() => {
+    createMapElements();
+  }, [createMapElements]);
+
+  const handleMapClick = useCallback((event) => {
+    if (isAddingPoint) {
+      const newPoint = {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+      };
+      onAddPoint(newPoint);
+    } else {
+      // Resetear colores de todos los círculos cuando se hace clic en el mapa
+      mapElementsRef.current.circles.forEach(circle => {
+        circle.setOptions({
+          strokeColor: '#FF0000',
+          fillColor: '#FF0000'
+        });
+      });
       setSelectedMerchant(null);
     }
-  };
+  }, [isAddingPoint, onAddPoint]);
 
   return (
-    <div style={{ position: 'relative', height: '600px' }}>
-      <LoadScript googleMapsApiKey="AIzaSyDupAiKTAn-Ncz9uHEbFIyyFoByePwHDek">
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={13}  // Zoom inicial un poco más cercano
-          onLoad={onLoad}
-          onUnmount={onUnmount}
-          onClick={handleMapClick}
-          options={mapOptions}
-        >
-          {/* Los círculos y marcadores se crean usando la API nativa de Google Maps */}
-        </GoogleMap>
-      </LoadScript>
-      <button 
-        className="add-point-button"
-        onClick={() => setIsAddingPoint(true)}
+    <div className="map-container" style={{ position: 'relative', height: '100%' }}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={13}
+        onLoad={onLoad}
+        onClick={handleMapClick}
+        options={mapOptions}
       >
-        +
-      </button>
+        {/* Los marcadores y círculos se crean manualmente en createMapElements */}
+      </GoogleMap>
+      {isAddingPoint && (
+        <div className="adding-point-message" style={{ 
+          position: 'absolute', 
+          top: 10, 
+          left: 10, 
+          background: '#000000', // Cambiamos el fondo a negro
+          color: 'white', // Cambiamos el color del texto a blanco
+          padding: '10px 20px', // Mantenemos el padding
+          borderRadius: '5px',
+          zIndex: 1000,
+          fontSize: '18px', // Mantenemos el tamaño de fuente
+          fontWeight: 'bold' // Mantenemos el texto en negrita
+        }}>
+          Click on the map to add a new point
+        </div>
+      )}
       {selectedMerchant && (
         <MerchantCard 
           merchant={selectedMerchant} 
-          onClose={() => setSelectedMerchant(null)}
+          onClose={() => {
+            setSelectedMerchant(null);
+            // Resetear colores de todos los círculos cuando se cierra la tarjeta
+            mapElementsRef.current.circles.forEach(circle => {
+              circle.setOptions({
+                strokeColor: '#FF0000',
+                fillColor: '#FF0000'
+              });
+            });
+            // Ajustar el zoom para mostrar todos los puntos
+            if (map && points.length > 0) {
+              const bounds = new window.google.maps.LatLngBounds();
+              points.forEach(point => bounds.extend({lat: point.lat, lng: point.lng}));
+              map.fitBounds(bounds);
+            }
+          }}
         />
       )}
     </div>

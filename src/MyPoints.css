@@ -1,77 +1,105 @@
 .my-points {
   padding: 20px;
-  font-family: Arial, sans-serif;
 }
 
-.my-points h2 {
-  margin-bottom: 20px;
-  color: #333;
+.my-points-button {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-.my-points table {
+.my-points-button:hover {
+  background-color: #333;
+}
+
+.edit-button, .delete-button {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.save-button {
+  background-color: #4CAF50;
+}
+
+.cancel-button {
+  background-color: #f44336;
+}
+
+.points-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
-  background-color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-top: 20px;
 }
 
-.my-points th, .my-points td {
-  border: 1px solid #e0e0e0;
+.points-table th,
+.points-table td {
+  border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
 }
 
-.my-points th {
-  background-color: #f5f5f5;
+.points-table th {
+  background-color: #f2f2f2;
   font-weight: bold;
-  color: #333;
 }
 
-.my-points tr:nth-child(even) {
+.points-table tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.my-points input {
+.points-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+.points-table input {
   width: 100%;
-  padding: 6px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.points-list {
+  display: none;
+}
+
+.point-card {
+  background-color: #f9f9f9;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
 }
 
-.my-points input:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 5px rgba(76,175,80,0.5);
+.point-coordinates,
+.point-rates {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
 }
 
-.delete-button, .save-changes-button {
-  padding: 8px 12px;
-  background-color: #000;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.point-actions {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.delete-button:hover, .save-changes-button:hover {
-  background-color: #333;
+.point-input {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
 }
 
-.save-changes-button {
-  display: block;
-  margin: 20px auto 0;
-  font-size: 16px;
-  padding: 10px 20px;
-}
+@media (max-width: 768px) {
+  .points-table {
+    display: none;
+  }
 
-/* Eliminamos o comentamos estas líneas ya que ya no son necesarias */
-/*
-.my-points td:nth-child(2),
-.my-points td:nth-child(3) {
-  font-family: monospace;
-  text-align: right;
+  .points-list {
+    display: block;
+  }
 }
-*/
